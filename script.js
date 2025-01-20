@@ -1,13 +1,14 @@
 class Node {
-  constructor(value, left = null, right = null) {
-    this.value = value
+  constructor(data, left = null, right = null) {
+    this.data = data
     this.left = left
     this.right = right
   }
 }
 class Tree {
-  constructor(array) {
-    this.root = null
+  constructor(arr) {
+    let array = sortAndRemoveDuplicates(arr)
+    this.root = buildTree(array)
   }
 }
 function sortAndRemoveDuplicates(array) {
@@ -20,10 +21,62 @@ function sortAndRemoveDuplicates(array) {
   return sortedArray
 }
 function buildTree(array) {
-  let arr = sortAndRemoveDuplicates(array)
-  return sortAndRemoveDuplicates(array)
-}
-const arr = [3, 96, 45, 3, 254, 32, 84, 69, 69]
+  //console.log(`array;${array}`)
+  if (array.length === 0) {
+    return null
+  }
+  if (array.length === 1) {
+    return new Node(array[0])
+  }
+  let midIndex = Math.floor(array.length / 2)
+  //console.log(`midIndex;${midIndex}`)
+  let root = array[midIndex]
+  console.log(`root:${root}`)
+  let left = array.slice(0, midIndex)
+  let right = array.slice(midIndex + 1)
+  console.log(`left:${left}`)
+  console.log(`right:${right}`)
 
+  let leftTree = buildTree(array.slice(0, midIndex))
+  let rightTree = buildTree(array.slice(midIndex + 1))
+
+  return new Node(root, leftTree, rightTree)
+}
+const arr = [9, 1, 2, 6, 7, 3, 4, 5]
+
+const prettyPrint = (node, prefix = "", isLeft = true) => {
+  if (node === null) {
+    return
+  }
+  if (node.right !== null) {
+    prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false)
+  }
+  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`)
+  if (node.left !== null) {
+    prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true)
+  }
+}
+const prettyPrintStr = (node, prefix = "", isLeft = true) => {
+  if (node === null) {
+    return ""
+  }
+  let result = ""
+  if (node.right !== null) {
+    result += prettyPrint(
+      node.right,
+      `${prefix}${isLeft ? "│   " : "    "}`,
+      false
+    )
+  }
+  result += `${prefix}${isLeft ? "└── " : "┌── "}${node.data}\n`
+  if (node.left !== null) {
+    result += prettyPrint(
+      node.left,
+      `${prefix}${isLeft ? "    " : "│   "}`,
+      true
+    )
+  }
+  return result
+}
 const myTree = new Tree(arr)
-console.log(buildTree(arr))
+console.log(prettyPrint(myTree.root))
