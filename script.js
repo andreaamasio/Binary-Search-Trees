@@ -132,6 +132,21 @@ class Tree {
       return 1 + this.depth(node, parent.right)
     }
   }
+  height(node) {
+    if (this.checkIfLeaf(node)) {
+      return 0
+    }
+    let leftHeight
+    let rightHeight
+    if (node.left) {
+      leftHeight = this.height(node.left)
+    } else leftHeight = 0
+
+    if (node.right) {
+      rightHeight = this.height(node.right)
+    } else rightHeight = 0
+    return Math.max(leftHeight, rightHeight) + 1
+  }
 
   //   deleteItem(value) {
   //     let current = this.root
@@ -222,11 +237,11 @@ function buildTree(array) {
 
   return new Node(root, leftTree, rightTree)
 }
-const arr = [1, 2, 3, 4, 5, 6, 7]
+const arr = [1, 2, 3, 4, 78, 45, 34, 97]
 
 const myTree = new Tree(arr)
 console.log(prettyPrint(myTree.root))
 function log(element) {
   return console.log(element.data)
 }
-console.log(myTree.depth(myTree.root))
+console.log(myTree.height(myTree.root))
