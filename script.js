@@ -48,7 +48,6 @@ class Tree {
   find(value, current = this.root) {
     if (current === null) return undefined
     if (current.data === value) {
-      console.log(`checking inside beginning if if ${current.data}`)
       return current
     }
 
@@ -132,7 +131,7 @@ class Tree {
       return 1 + this.depth(node, parent.right)
     }
   }
-  height(node) {
+  height1(node) {
     if (this.checkIfLeaf(node)) {
       return 0
     }
@@ -147,6 +146,60 @@ class Tree {
     } else rightHeight = 0
     return Math.max(leftHeight, rightHeight) + 1
   }
+  height(node) {
+    // Base case: the height of a null node is 0
+    if (node === null) {
+      return 0
+    }
+
+    // Calculate heights of left and right subtrees
+    let leftHeight = this.height(node.left)
+    let rightHeight = this.height(node.right)
+
+    // Add 1 for the current node and return the maximum of left/right heights
+    return Math.max(leftHeight, rightHeight) + 1
+  }
+  isBalanced1(node = this.root) {
+    if (node === null) return true
+    let heightLeftSubtree = this.height(node.left)
+    let heightRightSubtree = this.height(node.right)
+    let difference = Math.abs(heightLeftSubtree - heightRightSubtree)
+    if (difference > 1) {
+      return false
+    }
+    return this.isBalanced(node.left) && this.isBalanced(node.right)
+  }
+  isBalanced(node = this.root) {
+    // Base case: an empty node is balanced
+    if (node === null) {
+      return true
+    }
+
+    // Calculate the heights of the left and right subtrees
+    let leftHeight = this.height(node.left)
+    let rightHeight = this.height(node.right)
+
+    // Check the balance condition at the current node
+    let difference = Math.abs(leftHeight - rightHeight)
+    if (difference > 1) {
+      return false // Current node is not balanced
+    }
+
+    // Recursively check the balance of left and right subtrees
+    return this.isBalanced(node.left) && this.isBalanced(node.right)
+  }
+  rebalance() {
+    let newArray = []
+    function addToArray(element) {
+      newArray.push(element.data)
+    }
+    this.levelOrder(addToArray)
+    let sortedOrderedArray = sortAndRemoveDuplicates(newArray)
+    this.root = buildTree(sortedOrderedArray)
+    console.log(sortedOrderedArray)
+    console.log("rebalanced")
+  }
+  deleteItem(value) {}
 
   //   deleteItem(value) {
   //     let current = this.root
@@ -244,4 +297,5 @@ console.log(prettyPrint(myTree.root))
 function log(element) {
   return console.log(element.data)
 }
-console.log(myTree.height(myTree.root))
+console.log(myTree.rebalance())
+console.log(prettyPrint(myTree.root))
