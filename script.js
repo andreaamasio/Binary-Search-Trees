@@ -33,6 +33,78 @@ class Tree {
       return true
     } else return false
   }
+  find(value, current = this.root) {
+    if (current === null) return undefined
+    if (current.data === value) {
+      console.log(`checking inside beginning if if ${current.data}`)
+      return current
+    }
+
+    if (value < current.data) {
+      return this.find(value, current.left)
+    } else {
+      return this.find(value, current.right)
+    }
+  }
+  //   deleteItem(value) {
+  //     let current = this.root
+  //     let parent = null
+
+  //     while (current) {
+  //       if (current.data === value) {
+  //         // Case 1: Node is a leaf
+  //         if (this.checkIfLeaf(current)) {
+  //           if (parent === null) {
+  //             this.root = null // Deleting the root node
+  //           } else if (parent.left === current) {
+  //             parent.left = null
+  //           } else {
+  //             parent.right = null
+  //           }
+  //         }
+  //         // Case 2: Node has two children
+  //         else if (current.left && current.right) {
+  //           let successor = current.right
+  //           let successorParent = current
+
+  //           // Find the in-order successor
+  //           while (successor.left) {
+  //             successorParent = successor
+  //             successor = successor.left
+  //           }
+
+  //           current.data = successor.data
+
+  //           // Remove the successor
+  //           if (successorParent.left === successor) {
+  //             successorParent.left = successor.right
+  //           } else {
+  //             successorParent.right = successor.right
+  //           }
+  //         }
+  //         // Case 3: Node has one child
+  //         else {
+  //           let child = current.left ? current.left : current.right
+  //           if (parent === null) {
+  //             this.root = child // Replacing the root node
+  //           } else if (parent.left === current) {
+  //             parent.left = child
+  //           } else {
+  //             parent.right = child
+  //           }
+  //         }
+  //         return true // Deletion successful
+  //       } else if (value < current.data) {
+  //         parent = current
+  //         current = current.left
+  //       } else {
+  //         parent = current
+  //         current = current.right
+  //       }
+  //     }
+
+  //     return false // Value not found
+  //   }
 }
 function sortAndRemoveDuplicates(array) {
   let set = new Set(array)
@@ -45,7 +117,7 @@ function sortAndRemoveDuplicates(array) {
 }
 function buildTree(array) {
   if (array.length === 0) {
-    return null
+    return
   }
   if (array.length === 1) {
     return new Node(array[0])
@@ -62,7 +134,7 @@ function buildTree(array) {
 
   return new Node(root, leftTree, rightTree)
 }
-const arr = [9, 7, 88, 52, 87, 1, 2, 5]
+const arr = [1, 2, 3, 4, 5, 6, 7]
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
   if (node === null) {
@@ -78,6 +150,5 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 }
 
 const myTree = new Tree(arr)
-console.log(prettyPrint(myTree.root))
-myTree.insert(4)
-console.log(prettyPrint(myTree.root))
+//console.log(prettyPrint(myTree.root))
+console.log(myTree.find(6))
