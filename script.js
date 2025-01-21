@@ -74,9 +74,22 @@ class Tree {
         queue.push(next.right)
       }
     }
-
-    //this.levelOrder(callback, element)
   }
+  levelOrderRec(callback, queue = [this.root]) {
+    if (queue.length === 0) {
+      return null
+    }
+    let next = queue.shift()
+    callback(next)
+    if (next.left) {
+      queue.push(next.left)
+    }
+    if (next.right) {
+      queue.push(next.right)
+    }
+    return this.levelOrderRec(callback, queue)
+  }
+
   //   deleteItem(value) {
   //     let current = this.root
   //     let parent = null
@@ -173,4 +186,4 @@ console.log(prettyPrint(myTree.root))
 function log(element) {
   return console.log(element.data)
 }
-console.log(myTree.levelOrder(log))
+console.log(myTree.levelOrderRec(log))
