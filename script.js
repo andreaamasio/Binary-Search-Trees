@@ -1,3 +1,15 @@
+const prettyPrint = (node, prefix = "", isLeft = true) => {
+  if (node === null) {
+    return
+  }
+  if (node.right !== null) {
+    prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false)
+  }
+  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`)
+  if (node.left !== null) {
+    prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true)
+  }
+}
 class Node {
   constructor(data, left = null, right = null) {
     this.data = data
@@ -45,6 +57,25 @@ class Tree {
     } else {
       return this.find(value, current.right)
     }
+  }
+  levelOrder(callback, current = this.root) {
+    if (current === null) {
+      return null // tree is empty
+    }
+    let queue = [current]
+
+    while (queue.length > 0) {
+      let next = queue.shift()
+      callback(next)
+      if (next.left) {
+        queue.push(next.left)
+      }
+      if (next.right) {
+        queue.push(next.right)
+      }
+    }
+
+    //this.levelOrder(callback, element)
   }
   //   deleteItem(value) {
   //     let current = this.root
@@ -106,6 +137,7 @@ class Tree {
   //     return false // Value not found
   //   }
 }
+
 function sortAndRemoveDuplicates(array) {
   let set = new Set(array)
 
@@ -136,19 +168,9 @@ function buildTree(array) {
 }
 const arr = [1, 2, 3, 4, 5, 6, 7]
 
-const prettyPrint = (node, prefix = "", isLeft = true) => {
-  if (node === null) {
-    return
-  }
-  if (node.right !== null) {
-    prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false)
-  }
-  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`)
-  if (node.left !== null) {
-    prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true)
-  }
-}
-
 const myTree = new Tree(arr)
-//console.log(prettyPrint(myTree.root))
-console.log(myTree.find(6))
+console.log(prettyPrint(myTree.root))
+function log(element) {
+  return console.log(element.data)
+}
+console.log(myTree.levelOrder(log))
