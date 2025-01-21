@@ -199,7 +199,58 @@ class Tree {
     console.log(sortedOrderedArray)
     console.log("rebalanced")
   }
-  deleteItem(value) {}
+  deleteItem(value, current = this.root, parent = null) {
+    if (value < current.data) {
+      return this.deleteItem(value, current.left, (parent = current))
+    } else if (value > current.data) {
+      return this.deleteItem(value, current.right, (parent = current))
+    } else {
+      //value found
+      if (this.checkIfLeaf(current)) {
+        // case node to delete is leaf
+        if (parent.left === current) {
+          parent.left = null
+        } else if (parent.left === current) {
+          parent.right = null
+        }
+      } else if (current.left && current.right) {
+        // case node to delete has 2 children
+        let newArray = []
+        function addToArray(element) {
+          newArray.push(element.data)
+        }
+        this.levelOrder(addToArray, current.right)
+        console.log(newArray)
+        let minValueOfRightSubtree = Math.min(newArray)
+        let nodeThatWillReplace = this.find(minValueOfRightSubtree)
+        if ((parent.left = current)) {
+          console.log(`parent.left = current case`) //////TO FIX, ASSIGNING ONLY DATA VALUE? NO PERCHE SE HA CHILD
+          parent.left = nodeThatWillReplace
+        } else if ((parent.right = current)) {
+          parent.right = nodeThatWillReplace
+        }
+        this.deleteItem(nodeThatWillReplace.data)
+      } else {
+        // case node to delete has one child
+
+        if (parent.left === current) {
+          //connected to parent by left
+          if (current.left) {
+            parent.left = current.left
+          } else if (current.right) {
+            parent.left = current.right
+          }
+        } else if (parent.right === current) {
+          //connected to parent  by right
+          if (current.left) {
+            parent.right = current.left
+          } else if (current.right) {
+            parent.right = current.right
+          }
+        }
+      }
+    }
+  }
 
   //   deleteItem(value) {
   //     let current = this.root
@@ -297,5 +348,5 @@ console.log(prettyPrint(myTree.root))
 function log(element) {
   return console.log(element.data)
 }
-console.log(myTree.rebalance())
+console.log(myTree.deleteItem(3))
 console.log(prettyPrint(myTree.root))
