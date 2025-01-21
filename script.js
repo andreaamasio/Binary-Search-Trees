@@ -120,6 +120,18 @@ class Tree {
     this.postOrder(callback, current.right)
     callback(current)
   }
+  depth(node, parent = this.root) {
+    let nodeData = node.data
+    if (nodeData === parent.data) {
+      return 0 //found
+    }
+
+    if (nodeData < parent.data && parent.left) {
+      return 1 + this.depth(node, parent.left)
+    } else if (nodeData > parent.data && parent.right) {
+      return 1 + this.depth(node, parent.right)
+    }
+  }
 
   //   deleteItem(value) {
   //     let current = this.root
@@ -217,4 +229,4 @@ console.log(prettyPrint(myTree.root))
 function log(element) {
   return console.log(element.data)
 }
-console.log(myTree.postOrder(log))
+console.log(myTree.depth(myTree.root))
