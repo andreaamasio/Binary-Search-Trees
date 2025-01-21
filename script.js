@@ -75,7 +75,7 @@ class Tree {
       }
     }
   }
-  levelOrderRec(callback, queue = [this.root]) {
+  levelOrderRecursive(callback, queue = [this.root]) {
     if (queue.length === 0) {
       return null
     }
@@ -87,7 +87,7 @@ class Tree {
     if (next.right) {
       queue.push(next.right)
     }
-    return this.levelOrderRec(callback, queue)
+    return this.levelOrderRecursive(callback, queue)
   }
 
   //   deleteItem(value) {
