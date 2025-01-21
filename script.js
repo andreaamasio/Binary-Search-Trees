@@ -59,6 +59,9 @@ class Tree {
     }
   }
   levelOrder(callback, current = this.root) {
+    if (!callback) {
+      throw new Error("A callback is required")
+    }
     if (current === null) {
       return null // tree is empty
     }
@@ -76,6 +79,9 @@ class Tree {
     }
   }
   levelOrderRecursive(callback, queue = [this.root]) {
+    if (!callback) {
+      throw new Error("A callback is required")
+    }
     if (queue.length === 0) {
       return null
     }
@@ -88,6 +94,31 @@ class Tree {
       queue.push(next.right)
     }
     return this.levelOrderRecursive(callback, queue)
+  }
+  inOrder(callback, current = this.root) {
+    if (current === null) {
+      return
+    }
+
+    this.inOrder(callback, current.left)
+    callback(current)
+    this.inOrder(callback, current.right)
+  }
+  preOrder(callback, current = this.root) {
+    if (current === null) {
+      return
+    }
+    callback(current)
+    this.preOrder(callback, current.left)
+    this.preOrder(callback, current.right)
+  }
+  postOrder(callback, current = this.root) {
+    if (current === null) {
+      return
+    }
+    this.postOrder(callback, current.left)
+    this.postOrder(callback, current.right)
+    callback(current)
   }
 
   //   deleteItem(value) {
@@ -186,4 +217,4 @@ console.log(prettyPrint(myTree.root))
 function log(element) {
   return console.log(element.data)
 }
-console.log(myTree.levelOrderRec(log))
+console.log(myTree.postOrder(log))
