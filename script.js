@@ -200,6 +200,9 @@ class Tree {
     console.log("rebalanced")
   }
   deleteItem(value, current = this.root, parent = null) {
+    if (current === null) {
+      return // Value not found
+    }
     if (value < current.data) {
       return this.deleteItem(value, current.left, (parent = current))
     } else if (value > current.data) {
@@ -210,26 +213,25 @@ class Tree {
         // case node to delete is leaf
         if (parent.left === current) {
           parent.left = null
-        } else if (parent.left === current) {
+        } else if (parent.right === current) {
           parent.right = null
         }
       } else if (current.left && current.right) {
         // case node to delete has 2 children
-        let newArray = []
-        function addToArray(element) {
-          newArray.push(element.data)
+        let successorParent = current
+        let successor = current.right
+        while (successor.left) {
+          successorParent = successor
+          successor = successor.left
         }
-        this.levelOrder(addToArray, current.right)
-        console.log(newArray)
-        let minValueOfRightSubtree = Math.min(newArray)
-        let nodeThatWillReplace = this.find(minValueOfRightSubtree)
-        if ((parent.left = current)) {
-          console.log(`parent.left = current case`) //////TO FIX, ASSIGNING ONLY DATA VALUE? NO PERCHE SE HA CHILD
-          parent.left = nodeThatWillReplace
-        } else if ((parent.right = current)) {
-          parent.right = nodeThatWillReplace
+
+        current.data = successor.data
+
+        if (successorParent.left === successor) {
+          successorParent.left = successor.right
+        } else {
+          successorParent.right = successor.right
         }
-        this.deleteItem(nodeThatWillReplace.data)
       } else {
         // case node to delete has one child
 
@@ -348,5 +350,5 @@ console.log(prettyPrint(myTree.root))
 function log(element) {
   return console.log(element.data)
 }
-console.log(myTree.deleteItem(3))
+console.log(myTree.deleteItem(34))
 console.log(prettyPrint(myTree.root))
